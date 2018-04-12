@@ -96,6 +96,7 @@
         "serve": "php -S 0.0.0.0:8080 -t public index.php",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "test-coverage-html": "phpunit --colors=always --coverage-html ./data/coverage",
         "upload-coverage": "coveralls -v"
     },
     "extra": {
