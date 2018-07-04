@@ -8,7 +8,8 @@ import {
     RECEIVE_PLAYERS_ONLINE_LIST,
     PLAYER_AUTHENTICATED,
     RECEIVE_LOGOUT,
-    RECEIVE_LOGIN
+    RECEIVE_LOGIN,
+    RECEIVE_JOIN_GAMES_LIST
 } from "../actions/index";
 import {GAME_WAS_REMOVED, REQUEST_EXIT_GAME} from "../actions";
 
@@ -88,7 +89,7 @@ const app = (state = initialState, action) => {
                 games: Object.assign({}, state.games, Object.assign({}, state.games[action.game.id], action.game.id))
             });
 
-        case 'RECEIVE_JOIN_GAMES_LIST':
+        case RECEIVE_JOIN_GAMES_LIST:
 
             return Object.assign({}, state, {
                 games: Object.assign({}, {}, action.data)

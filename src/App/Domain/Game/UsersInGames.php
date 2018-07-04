@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: maxgu
- * Date: 08.03.18
- * Time: 9:03
- */
 
 namespace App\Domain\Game;
 

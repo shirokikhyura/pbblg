@@ -10,10 +10,10 @@ const OpenGamesListComponent = ({games, onGameClick}) => (
                     <div>
                         <div>
                             <h6 className="my-0">Game #{games[id].id}</h6>
-                            <small className="text-muted">{games[id].created}, N free places</small>
+                            <small className="text-muted">{games[id].created}, {games[id].countFreePlaces} free places</small>
                         </div>
                     </div>
-                    <button className="btn btn-sm btn-success" onClick={() => onGameClick(games[id].id)}>
+                    <button className="btn btn-sm btn-success" disabled={games[id].countFreePlaces > 0 ? false : true} onClick={() => onGameClick(games[id].id)}>
                         Join <i className="fa fa-chevron-right"></i>
                     </button>
                 </li>
@@ -26,8 +26,8 @@ OpenGamesListComponent.propTypes = {
     games: PropTypes.objectOf(
         PropTypes.shape({
             id: PropTypes.number.isRequired,
-            created: PropTypes.string.isRequired
-            // countFreePlaces: PropTypes.number.isRequired
+            created: PropTypes.string.isRequired,
+            countFreePlaces: PropTypes.number.countFreePlaces
         })
     ).isRequired,
     onGameClick: PropTypes.func.isRequired

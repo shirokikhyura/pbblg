@@ -2,6 +2,8 @@
 
 namespace App\WebSocket\Action\GetGames;
 
+use App\Domain\Game\GameStatus;
+use App\Domain\Game\UsersInGames;
 use Psr\Http\Message\ServerRequestInterface;
 use T4webDomainInterface\Infrastructure\RepositoryInterface;
 use App\WebSocket\Action\ActionHandlerInterface;
@@ -16,9 +18,21 @@ class GetGamesHandler implements ActionHandlerInterface
      */
     private $gameRepository;
 
-    public function __construct(RepositoryInterface $gameRepository)
-    {
+    /**
+     * @var RepositoryInterface
+     */
+    private $usersInGamesRepository;
+
+    /**
+     * @param RepositoryInterface $gameRepository
+     * @param RepositoryInterface $usersInGamesRepository
+     */
+    public function __construct(
+        RepositoryInterface $gameRepository,
+        RepositoryInterface $usersInGamesRepository
+    ) {
         $this->gameRepository = $gameRepository;
+        $this->usersInGamesRepository = $usersInGamesRepository;
     }
 
     /**
@@ -38,9 +52,26 @@ class GetGamesHandler implements ActionHandlerInterface
 
         $result = [];
 
+        /** @var Game $game */
         foreach ($games as $game) {
             $gameVieModel = new GameViewModel($game);
-            $result[] = $gameVieModel->extract();
+            $result[$game->getId()] = $gameVieModel->extract();
+            $result[$game->getId()]['countFreePlaces'] = GameStatus::MAX_PLAYERS;
+        }
+
+        $usersInGame = $this->usersInGamesRepository->findMany([
+            'gameId_in' => array_keys($result),
+            'order' => 'gameId ASC',
+        ]);
+
+        if ($usersInGame) {
+            /** @var UsersInGames $userInGame */
+            foreach ($usersInGame as $userInGame) {
+                $result[$userInGame->getGameId()]['countFreePlaces']--;
+                if ($result[$userInGame->getGameId()]['countFreePlaces'] < 0) {
+                    $result[$userInGame->getGameId()]['countFreePlaces'] = 0;
+                }
+            }
         }
 
         return $result;

@@ -9,7 +9,8 @@ class GetGamesHandlerFactory
     public function __invoke(ContainerInterface $container)
     {
         return new GetGamesHandler(
-            $container->get('Game\Infrastructure\Repository')
+            $container->get('Game\Infrastructure\Repository'),
+            $container->get('UsersInGames\Infrastructure\Repository')
         );
     }
 }

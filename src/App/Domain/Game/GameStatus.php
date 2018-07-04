@@ -7,6 +7,7 @@ class GameStatus
     const STATUS_OPEN = 1;
     const STATUS_IN_PROGRESS = 2;
     const STATUS_ENDED = 3;
+    const MAX_PLAYERS = 4;
 
     public static $statusArray = [
         self::STATUS_OPEN => 'Open',
